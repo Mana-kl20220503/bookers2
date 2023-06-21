@@ -32,7 +32,7 @@
            <% if user_signed_in? %>
 
           <li>
-            <%= link_to root_path, class: "nav-link text-light" do %>
+            <%= link_to user_path(current_user), class: "nav-link text-light" do %>
               <i class="fas fa-home" aria-hidden="true"></i> Home
               <% end %>
         </li>
@@ -60,7 +60,7 @@
           </li>
 
           <li>
-            <%= link_to homes_about_path, class: "nav-link text-light" do %>
+            <%= link_to home_about_path, class: "nav-link text-light" do %>
               <i class= "fas fa-link" aria-hidden="true"></i> About
               <% end %>
           </li>
@@ -87,7 +87,14 @@
 
 
 </header>
+
 <main>
+
+<div class="flash-notifications">
+  <% flash.each do |key, value| %>
+   <%= content_tag(:div, value, class: key) %>
+  <% end %>
+</div>
 
   <%= yield %>
 </main>
