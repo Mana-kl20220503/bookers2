@@ -7,7 +7,7 @@ class BooksController < ApplicationController
     @books = Book.all
   end
 
-    def create
+  def create
     # １.&2. データを受け取り新規登録するためのインスタンス作成
     @book = Book.new(book_params)
     @book.user_id = current_user.id
@@ -15,18 +15,19 @@ class BooksController < ApplicationController
     if @book.save
       flash[:notice] = "You have created book successfully."
     # 4. トップ画面へリダイレクト
-    redirect_to book_path(@book)
-  else
-    @user = current_user
-    @books = Book.all
-    render :index
-  end
+      redirect_to book_path(@book)
+    else
+      @user = current_user
+      @books = Book.all
+      render :index
+    end
   end
 
   def show
     @new_book = Book.new
     @book = Book.find(params[:id])
     @user = @book.user
+    @book_comment = BookComment.new
   end
 
   def destroy

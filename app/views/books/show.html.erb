@@ -67,9 +67,77 @@
             <td><%= link_to "Destroy", book_path(@book.id), class: "btn btn-sm btn-danger destroy_book_86974", method: :delete, data: {confirm: "本当に消しますか？"}%>
        </td>
         <% end %>
+
+        <td>
+          <% if @book.favorite_by?(current_user) %>
+          <p>
+          <%= link_to book_favorites_path(@book.id), class: "fa-solid fa-heart", method: :delete do %>
+          <%= @book.favorites.count %>
+          <% end %>
+          </p>
+          <% else %>
+          <p>
+          <%= link_to book_favorites_path(@book.id), class: "fa-regular fa-heart", method: :post do %>
+          <%= @book.favorites.count %>
+          <%end%>
+          </p>
+          <%end%>
+        </td>
+
+        <td>
+          <p>コメント数：<%= @book.book_comments.count %></p>
+        </td>
+
         </tr>
 
       </tbody></table>
+
+      <table>
+  <tbody>
+    <tr>
+      <% @book.book_comments.each do |book_comment| %>
+        <td>
+          <%= link_to user_path(book_comment.user_id) do %>
+            <%= image_tag book_comment.user.get_profile_image(100, 100) %>
+            <br>
+            <%= book_comment.user.name %>
+          <% end %>
+        </td>
+        <td>
+          <%= book_comment.comment %>
+        </td>
+        <td>
+          <% if book_comment.user == current_user %>
+
+            <td><%= link_to "Destroy", book_book_comment_path(book_comment.book, book_comment), class: "btn btn-sm btn-danger destroy_book_86974", method: :delete%>
+
+        <% end %>
+        </td>
+         </tr>
+      <% end %>
+  </tbody>
+</table>
+
+
+
+<% if @book_comment.errors.any? %>
+  <%= @book_comment.errors.count %>件のエラーが発生しました
+  <ul>
+    <% @book_comment.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+
+<div>
+  <%= form_with model: [@book, @book_comment] do |f| %>
+    <%= f.text_area :comment, rows: '5', placeholder: "コメントをここに" %>
+    <%= f.submit "送信" %>
+  <% end %>
+</div>
+
     </div>
+
   </div>
 </div>
